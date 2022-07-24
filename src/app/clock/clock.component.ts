@@ -10,6 +10,7 @@ export class ClockComponent implements OnInit {
   constructor() { }
 
   ngOnInit(): void {
+    this.getTimeValues();
     this.startClock();
   }
 

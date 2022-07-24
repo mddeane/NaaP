@@ -1,3 +1,4 @@
+import { FormsModule } from '@angular/forms';
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 
@@ -11,6 +12,8 @@ import { ProductionComponent } from './production/production.component';
 import { CommandComponent } from './command/command.component';
 import { NavbarComponent } from './navbar/navbar.component';
 import { ClockComponent } from './clock/clock.component';
+import { DateComponent } from './date/date.component';
+import { OnEnterKeyDirective } from './directives/onEnterKey/on-enter-key.directive';
 
 @NgModule({
   declarations: [
@@ -22,11 +25,14 @@ import { ClockComponent } from './clock/clock.component';
     ProductionComponent,
     CommandComponent,
     NavbarComponent,
-    ClockComponent
+    ClockComponent,
+    DateComponent,
+    OnEnterKeyDirective,
   ],
   imports: [
     BrowserModule,
-    AppRoutingModule
+    AppRoutingModule,
+    FormsModule
   ],
   providers: [],
   bootstrap: [AppComponent]

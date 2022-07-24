@@ -1,1 +1,80 @@
-<p>rundown works!</p>
+<div class="container">
+    <div class="row mt-2 mb-1">
+        <div class="col-sm-9">
+            <h5>5pm News Wed Jul 22 2022</h5>
+        </div>
+        <div class="col-sm-3">
+            <app-clock></app-clock>
+        </div>
+    </div>
+    <table class="table table-sm table-striped table-bordered">
+        <thead class="bg-primary text-white">
+            <tr>
+                <th scope="col" style="width: 30px"></th>
+                <th scope="col" style="width: 30px"></th>
+                <th scope="col" style="width: 30px"></th>
+                <th scope="col" style="width: 55px">Page</th>
+                <th scope="col" style="width: 300px">Slug</th>
+                <th scope="col" style="width: 75px">Est</th>
+                <th scope="col" style="width: 100px">ID</th>
+                <th scope="col" style="width: 300px">Graphics</th>
+            </tr>
+        </thead>
+        <tbody>
+            <ng-template ngFor let-row let-i="index" [ngForOf]="rundownRows">
+                <tr [style]="row.rowType==='BREAK' ? 'background-color: #c0f1f7' : ''">
+                    <!-- move icon cell -->
+                    <td class="bg-secondary text-center m-0 p-0">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20px" height="20px" fill="white"
+                            viewBox="0 0 16 16">
+                            <path fill-rule="evenodd"
+                                d="M2.5 12a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5zm0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5zm0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5z" />
+                        </svg>
+                    </td>
+                    <!-- dropdown cell -->
+                    <td class="bg-secondary">
+                        <div class="dropdown">
+                            <div class="dropdown-toggle p-0 text-white text-center" data-bs-toggle="dropdown">
+                            </div>
+                            <ul class="dropdown-menu">
+                                <li><a class="dropdown-item">Link 1</a></li>
+                                <li><a class="dropdown-item">Link 2</a></li>
+                                <li><a class="dropdown-item">Link 3</a></li>
+                            </ul>
+                        </div>
+                    </td>
+                    <!-- checkbox cell -->
+                    <td>
+                        <input class=" form-check-input" type="checkbox">
+                    </td>
+                    <!-- page number -->
+                    <td>
+                        <input appOnEnterKey #pageInput type=" text" [(ngModel)]="row.rowPageNumber"
+                            style="width: 100%; background-color: transparent; border: none;"
+                            (focus)="pageInput.style.backgroundColor = '#ffefc0'"
+                            (blur)="pageInput.style.backgroundColor = 'transparent'">
+                    </td>
+                    <!-- story slug -->
+                    <td>
+                        <input appOnEnterKey #titleInput type=" text" [(ngModel)]="row.rowStory.storyTitle"
+                            style="width: 100%; background-color: transparent; border: none;"
+                            (focus)="titleInput.style.backgroundColor = '#ffefc0'"
+                            (blur)="titleInput.style.backgroundColor = 'transparent'">
+                    </td>
+                    <!-- estimated time -->
+                    <td>
+                        <input appOnEnterKey #estTimeInput type=" text" [value]="convertTime(row.rowStory.storyEst)"
+                            (blur)="row.rowStory.storyEst = inputTime(estTimeInput.value)"
+                            style="width: 100%; background-color: transparent; border: none;"
+                            (focus)="estTimeInput.style.backgroundColor = '#ffefc0'"
+                            (blur)="estTimeInput.style.backgroundColor = 'transparent'">
+                    </td>
+                    <!-- story id -->
+                    <td>{{row.rowStory.storyId}}</td>
+                    <!-- graphics -->
+                    <td>{{row.rowStory.storyGraphics}}</td>
+                </tr>
+            </ng-template>
+        </tbody>
+    </table>
+</div>
