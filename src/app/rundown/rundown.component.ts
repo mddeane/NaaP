@@ -258,9 +258,19 @@ export class RundownComponent implements OnInit {
     return str;
   }
 
+  /*
+    This function takes the input for estimated time and returns the milliseconds equivalent.
+    It calls checkRegEx() to validate.
+  */
   formatToMilli(str: string): number {
 
     let milli: number = 0;
+
+    let ok: boolean = this.checkRegEx(str);
+
+    if (!ok) {
+      return 0;
+    }
 
     let sss: number = this.getSecondsFromString(str);
     let mmm: number = this.getMinutesFromString(str);
@@ -272,12 +282,19 @@ export class RundownComponent implements OnInit {
     return milli;
   }
 
-  testRegEx(str: string): boolean {
+  /*
+    This function checks the estimated time input to make sure it 
+    is only digits (0-9), period (.), or colon (:).
+    Existence of other characters returns 0. 
+  */
+  checkRegEx(str: string): boolean {
 
-    const re = /[^0-9:\.]/g;
+    const re = /^[0-9\.\:]+$/;
+
     const ok = re.test(str);
     return ok;
   }
+
   testConvert(str: string): number {
     return parseInt(str);
   }
@@ -397,4 +414,10 @@ export class RundownComponent implements OnInit {
     return ddd;
   }
 
+  rowInputs: HTMLInputElement[] = [];
+  allRowsChecked: boolean = false;
+  noRowsChecked: boolean = false;
+
+  allRowChecks(doCheck: boolean) {
+  }
 }

@@ -9,3 +9,7 @@ td input:focus-visible {
 .hide-input {
     display:none;
 }
+
+.checked-secondary input:checked {
+    background-color: darkblue;
+}

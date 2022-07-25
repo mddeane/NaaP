@@ -12,8 +12,11 @@
             <tr>
                 <th scope="col" style="width: 30px"></th>
                 <th scope="col" style="width: 30px"></th>
-                <th scope="col" style="width: 30px"></th>
-                <th scope="col" style="width: 55px">Page</th>
+                <th scope="col" style="width: 30px" [class]="'checked-secondary'">
+                    <input #allRowCheck class=" form-check-input" type="checkbox">
+                </th>
+                <th scope=" col" style="width: 55px">Page
+                </th>
                 <th scope="col" style="width: 300px">Slug</th>
                 <th scope="col" style="width: 75px">Est</th>
                 <th scope="col" style="width: 100px">ID</th>
@@ -22,9 +25,10 @@
         </thead>
         <tbody>
             <ng-template ngFor let-row let-i="index" [ngForOf]="rundownRows">
-                <tr [style]="row.rowType==='BREAK' ? 'background-color: #c0f1f7' : ''">
+                <tr #tableRow [style]="row.rowType==='BREAK' ? 'background-color: #cfe2ff' : ''">
+                    <!-- <tr [class]="row.rowType==='BREAK' ? 'table-primary' : ''"> -->
                     <!-- move icon cell -->
-                    <td class="bg-secondary text-center m-0 p-0">
+                    <td [class]="'bg-secondary text-center m-0 p-0'">
                         <svg xmlns="http://www.w3.org/2000/svg" width="20px" height="20px" fill="white"
                             viewBox="0 0 16 16">
                             <path fill-rule="evenodd"
@@ -44,8 +48,16 @@
                         </div>
                     </td>
                     <!-- checkbox cell -->
-                    <td>
-                        <input class=" form-check-input" type="checkbox">
+                    <td [class]="'checked-secondary'">
+                        <!-- <input class=" form-check-input" type="checkbox"> -->
+                        <input #rowCheck class=" form-check-input" type="checkbox"
+                            [checked]="allRowsChecked==true ? true : noRowsChecked == true ? false : true"
+                            (change)="rowCheck.checked ? tableRow.style.backgroundColor= '#fff3cd' : tableRow.style.backgroundColor= row.rowType==='BREAK' ? '#cfe2ff' : 'transparent'">
+                        <!-- <input #rowCheck class=" form-check-input" type="checkbox"
+                            (change)="rowCheck.checked ? tableRow.style.backgroundColor= '#fff3cd' : tableRow.style.backgroundColor= row.rowType==='BREAK' ? '#cfe2ff' : 'transparent'"
+                            (init)="rowInputs.push(rowCheck)"> -->
+                        <!-- <input #rowCheck class=" form-check-input" type="checkbox"
+                            (change)="rowCheck.checked ? tableRow.style.outline= '2px solid gray' : tableRow.style.outline= ''"> -->
                     </td>
                     <!-- page number -->
                     <td>
@@ -63,16 +75,27 @@
                     </td>
                     <!-- estimated time -->
                     <td>
+                        <input #estTimeDisplay type="text" [value]="formatFromMilli(row.rowStory.storyEst)"
+                            style="display: block; background-color: transparent; border:none;"
+                            [ngStyle]="{'display': estTimeInput.style.display == 'none' ? 'block' : 'none'}"
+                            (focus)="estTimeDisplay.style.display='none'; estTimeInput.style.display='block'; estTimeInput.focus()">
+                        <input appOnEnterKey #estTimeInput type="text" [value]="formatFromMilli(row.rowStory.storyEst)"
+                            style="display: none; background-color: #ffefc0; border:none;"
+                            (blur)="row.rowStory.storyEst=formatToMilli(estTimeInput.value); estTimeInput.style.display='none'; estTimeDisplay.style.display='block';"
+                            (focus)="formatFromMilli(row.rowStory.storyEst)" (dblclick)="estTimeInput.select()">
+
+
+
                         <!-- <input appOnEnterKey #estTimeInput type=" text" [value]="convertTime(row.rowStory.storyEst)"
                             (blur)="row.rowStory.storyEst = inputTime(estTimeInput.value)"
                             style="width: 100%; background-color: transparent; border: none;"
                             (focus)="estTimeInput.style.backgroundColor = '#ffefc0'"
                             (blur)="estTimeInput.style.backgroundColor = 'transparent'"> -->
 
-                        <input appOnEnterKey #estTimeInput type=" text" [value]="row.rowStory.storyEst" (blur)="row.rowStory.storyEst = timeWithColonReturnInteger(estTimeInput.value);
+                        <!-- <input appOnEnterKey #estTimeInput type=" text" [value]="row.rowStory.storyEst" (blur)="row.rowStory.storyEst = timeWithColonReturnInteger(estTimeInput.value);
                             estTimeInput.style.backgroundColor = 'transparent'"
                             style="width: 100%; background-color: transparent; border: none;"
-                            (focus)="estTimeInput.style.backgroundColor = '#ffefc0'">
+                            (focus)="estTimeInput.style.backgroundColor = '#ffefc0'"> -->
 
                         <!-- <input appOnEnterKey #estTimeInput type=" text" [value]="formatTime(row.rowStory.storyEst)"
                             (blur)="row.rowStory.storyEst = timeWithColonReturnInteger(estTimeInput.value);
@@ -95,8 +118,8 @@
         </tbody>
     </table>
 </div>
-<div>
-    <!-- <p>
+<!-- <div> -->
+<!-- <p>
         {{formatFromMilli(3602000)}}
     </p>
     <p>
@@ -108,14 +131,23 @@
     <p>
         {{getSecondsFromString(":30")}}
     </p> -->
-    <p>
+<!-- <p>
         testNumber: {{testNumber}}
     </p>
     <p>
-        {{testRegEx("dddf9")}}
+        000000: {{checkRegEx("000000")}}
     </p>
-</div>
-<div class="container">
+    <p>
+        00:00:00: {{checkRegEx("00:00:00")}}
+    </p>
+    <p>
+        00.00.00: {{checkRegEx("00.00.00")}}
+    </p>
+    <p>
+        00:01:tt: {{checkRegEx("00:01:tt")}}
+    </p> -->
+<!-- </div> -->
+<!-- <div class="container">
     <table class="table">
         <thead class="table-dark">
             <tr>
@@ -130,22 +162,47 @@
             <tr>
                 <td>1</td>
                 <td>2</td>
-                <td>
-                    <input #timeDisplay type="text" [value]="formatFromMilli(testNumber)"
+                <td> -->
+<!-- <input #timeDisplay type="text" [value]="formatFromMilli(testNumber)"
                         style="display: block; background-color: transparent; border:none;"
                         [ngStyle]="{'display': timeInput.style.display == 'none' ? 'block' : 'none'}"
                         (focus)="timeDisplay.style.display='none'; timeInput.style.display='block'; timeInput.focus()">
-                    <!-- <input #timeInput type="text" [value]="testNumber"
-                        style="display: none; background-color: #ffefc0; border:none;"
-                        [ngStyle]="{'display': timeDisplay.style.display == 'none' ? 'block' : 'none'}"
-                        (blur)="timeInput.style.display='none'"> -->
                     <input appOnEnterKey #timeInput type="text" [value]="formatFromMilli(testNumber)"
                         style="display: none; background-color: #ffefc0; border:none;"
-                        (blur)="testNumber=formatToMilli(timeInput.value); timeInput.style.display='none'; timeDisplay.style.display='block'">
+                        (blur)="testNumber=formatToMilli(timeInput.value); timeInput.style.display='none'; timeDisplay.style.display='block'"
+                        (focus)="formatFromMilli(testNumber)"> -->
+<!-- <input #estTimeDisplay type="text" [value]="formatFromMilli(testNumber)"
+                        style="display: block; background-color: transparent; border:none;"
+                        [ngStyle]="{'display': estTimeInput.style.display == 'none' ? 'block' : 'none'}"
+                        (focus)="estTimeDisplay.style.display='none'; estTimeInput.style.display='block'; estTimeInput.focus()">
+                    <input appOnEnterKey #estTimeInput type="text" [value]="formatFromMilli(testNumber)"
+                        style="display: none; background-color: #ffefc0; border:none;"
+                        (blur)="testNumber=formatToMilli(estTimeInput.value); estTimeInput.style.display='none'; estTimeDisplay.style.display='block'"
+                        (focus)="formatFromMilli(testNumber)"> -->
+
+<!-- <input appOnEnterKey #estTimeInput type=" text" [value]="row.rowStory.storyEst" (blur)="row.rowStory.storyEst = timeWithColonReturnInteger(estTimeInput.value);
+                            estTimeInput.style.backgroundColor = 'transparent'"
+                            style="width: 100%; background-color: transparent; border: none;"
+                            (focus)="estTimeInput.style.backgroundColor = '#ffefc0'"> 
+                    -->
+<!--
+                                            <input #estTimeDisplay type="text" [value]="formatFromMilli(row.rowStory.storyEst)"
+                        style="display: block; background-color: transparent; border:none;"
+                        [ngStyle]="{'display': estTimeInput.style.display == 'none' ? 'block' : 'none'}"
+                        (focus)="estTimeDisplay.style.display='none'; estTimeInput.style.display='block'; estTimeInput.focus()">
+                    <input appOnEnterKey #estTimeInput type="text" [value]="formatFromMilli(row.rowStory.storyEst)"
+                        style="display: none; background-color: #ffefc0; border:none;"
+                        (blur)="row.rowStory.storyEst=formatToMilli(estTimeInput.value); estTimeInput.style.display='none'; estTimeDisplay.style.display='block'"
+                        (focus)="formatFromMilli(row.rowStory.storyEst)">
+
+                        
+                        -->
+
+<!-- 
                 </td>
                 <td>4</td>
                 <td>5</td>
             </tr>
         </tbody>
     </table>
-</div>
+</div> -->
