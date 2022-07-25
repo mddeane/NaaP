@@ -1,3 +1,11 @@
 td input:focus-visible {
     outline: none;
 }  
+
+.show-input {
+    display:block;
+}
+
+.hide-input {
+    display:none;
+}

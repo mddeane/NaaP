@@ -63,11 +63,28 @@
                     </td>
                     <!-- estimated time -->
                     <td>
-                        <input appOnEnterKey #estTimeInput type=" text" [value]="convertTime(row.rowStory.storyEst)"
+                        <!-- <input appOnEnterKey #estTimeInput type=" text" [value]="convertTime(row.rowStory.storyEst)"
                             (blur)="row.rowStory.storyEst = inputTime(estTimeInput.value)"
                             style="width: 100%; background-color: transparent; border: none;"
                             (focus)="estTimeInput.style.backgroundColor = '#ffefc0'"
-                            (blur)="estTimeInput.style.backgroundColor = 'transparent'">
+                            (blur)="estTimeInput.style.backgroundColor = 'transparent'"> -->
+
+                        <input appOnEnterKey #estTimeInput type=" text" [value]="row.rowStory.storyEst" (blur)="row.rowStory.storyEst = timeWithColonReturnInteger(estTimeInput.value);
+                            estTimeInput.style.backgroundColor = 'transparent'"
+                            style="width: 100%; background-color: transparent; border: none;"
+                            (focus)="estTimeInput.style.backgroundColor = '#ffefc0'">
+
+                        <!-- <input appOnEnterKey #estTimeInput type=" text" [value]="formatTime(row.rowStory.storyEst)"
+                            (blur)="row.rowStory.storyEst = timeWithColonReturnInteger(estTimeInput.value);
+                            estTimeInput.style.backgroundColor = 'transparent'"
+                            style="width: 100%; background-color: transparent; border: none;"
+                            (focus)="estTimeInput.style.backgroundColor = '#ffefc0'">
+                        <span>{{formatTime(row.rowStory.storyEst)}}</span> -->
+
+                        <!-- <input appOnEnterKey #estTimeInput type="text" [value]="formatTime(row.rowStory.storyEst)"
+                            (blur)="row.rowStory.storyEst = timeWithColonReturnInteger(estTimeInput.value);">
+                        <div>{{row.rowStory.storyEst}}</div>
+                        <div></div> -->
                     </td>
                     <!-- story id -->
                     <td>{{row.rowStory.storyId}}</td>
@@ -75,6 +92,60 @@
                     <td>{{row.rowStory.storyGraphics}}</td>
                 </tr>
             </ng-template>
+        </tbody>
+    </table>
+</div>
+<div>
+    <!-- <p>
+        {{formatFromMilli(3602000)}}
+    </p>
+    <p>
+        {{formatToMilli("01:30")}}
+    </p>
+    <p>
+        {{getSecondsFromString("1:30")}}
+    </p>
+    <p>
+        {{getSecondsFromString(":30")}}
+    </p> -->
+    <p>
+        testNumber: {{testNumber}}
+    </p>
+    <p>
+        {{testRegEx("dddf9")}}
+    </p>
+</div>
+<div class="container">
+    <table class="table">
+        <thead class="table-dark">
+            <tr>
+                <th>1</th>
+                <th>2</th>
+                <th>Time</th>
+                <th>4</th>
+                <th>5</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>1</td>
+                <td>2</td>
+                <td>
+                    <input #timeDisplay type="text" [value]="formatFromMilli(testNumber)"
+                        style="display: block; background-color: transparent; border:none;"
+                        [ngStyle]="{'display': timeInput.style.display == 'none' ? 'block' : 'none'}"
+                        (focus)="timeDisplay.style.display='none'; timeInput.style.display='block'; timeInput.focus()">
+                    <!-- <input #timeInput type="text" [value]="testNumber"
+                        style="display: none; background-color: #ffefc0; border:none;"
+                        [ngStyle]="{'display': timeDisplay.style.display == 'none' ? 'block' : 'none'}"
+                        (blur)="timeInput.style.display='none'"> -->
+                    <input appOnEnterKey #timeInput type="text" [value]="formatFromMilli(testNumber)"
+                        style="display: none; background-color: #ffefc0; border:none;"
+                        (blur)="testNumber=formatToMilli(timeInput.value); timeInput.style.display='none'; timeDisplay.style.display='block'">
+                </td>
+                <td>4</td>
+                <td>5</td>
+            </tr>
         </tbody>
     </table>
 </div>
