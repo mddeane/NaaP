@@ -12,6 +12,7 @@ export const TEST_ROWS: RundownRow[] = [
             "Script for Story 1",
             30000,
             []),
+        "",
         []
     ),
     new RundownRow(
@@ -25,6 +26,7 @@ export const TEST_ROWS: RundownRow[] = [
             "Script for Story 2",
             45000,
             []),
+        "",
         []
     ),
     new RundownRow(
@@ -38,6 +40,7 @@ export const TEST_ROWS: RundownRow[] = [
             "Script for Story 3",
             30000,
             []),
+        "",
         []
     ),
     new RundownRow(
@@ -51,6 +54,7 @@ export const TEST_ROWS: RundownRow[] = [
             "Script for Story 4",
             60000,
             []),
+        "",
         []
     )
 ]

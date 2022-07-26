@@ -11,5 +11,13 @@ td input:focus-visible {
 }
 
 .checked-secondary input:checked {
-    background-color: darkblue;
+    background-color: #7b66ab;
+}
+
+.break-font, .break-font td, .break-font td input {
+    color: white;
+}
+
+.break-font td input:focus-visible {
+    color: black;
 }

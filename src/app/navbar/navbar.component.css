@@ -1,0 +1,7 @@
+.navbar-dark, .navbar-dark li a:link, .navbar-dark li a {
+    color: rgba(255, 255, 255, 1);
+}
+
+.navbar-dark li a:disabled {
+    color: rgba(255, 255, 255, 1);
+}
