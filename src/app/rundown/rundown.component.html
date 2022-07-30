@@ -1,14 +1,19 @@
-<div class="container">
+<div class="px-5" style="overflow-x: auto">
     <div class="row mt-2 mb-1">
-        <div class="col-sm-9">
+        <div class="col-md-8">
             <!-- <h5>5pm News Wed Jul 22 2022</h5> -->
-            <h5>{{rundown.rundownTitle}}</h5>
+            <h5>{{rundown.rundownTitle}} {{is24}}</h5>
         </div>
-        <div class="col-sm-3">
-            <app-clock></app-clock>
+        <div class="col-md-4" style="text-align: right;">
+            <span class="ms-1">
+                <app-date></app-date>
+            </span>
+            <span class="ms-1">
+                <app-clock (getIs24Hour)="is24=change24Hour($event)"></app-clock>
+            </span>
         </div>
     </div>
-    <table class="table table-sm table-striped table-bordered">
+    <table class="table table-sm table-striped table-bordered table-rundown">
         <thead class="bg-primary text-white">
             <tr>
                 <th scope="col" style="width: 30px"></th>
@@ -23,17 +28,18 @@
                         </ul>
                     </div>
                 </th>
-                <th scope="col" style="width: 30px" [class]="'checked-secondary'">
+                <th scope="col" style="max-width: 30px" [class]="'checked-secondary'">
                     <input #allRowCheck class=" form-check-input" type="checkbox">
                 </th>
-                <th scope=" col" style="width: 55px">Page</th>
-                <th scope="col" style="width: 250px">Slug</th>
-                <th scope="col" style="width: 100px">Segment</th>
+                <th scope=" col" style="max-width: 55px">Page</th>
+                <th scope="col" style="width: 300px">Slug</th>
+                <th scope="col" style="width: 120px">Segment</th>
                 <th scope="col" style="width: 75px">Est</th>
                 <th scope="col" style="width: 100px">ID</th>
                 <th scope="col" style="width: 300px">Graphics</th>
-                <th scope="col" style="width: 75px">Front</th>
-                <th scope="col" style="width: 75px">Back</th>
+                <th scope="col" style="min-width: 75px">Front</th>
+                <th scope="col" style="min-width: 75px">Back</th>
+                <!-- Anchor, Camera, Source, Notes, Actual Time, Writer, Modified Time, Modified By -->
             </tr>
         </thead>
         <tbody>
@@ -41,7 +47,7 @@
                 <!-- <tr #tableRow [style]="row.rowType==='BREAK' ? 'background-color: #a0cdff;' : ''"> -->
                 <tr #tableRow [class]="row.rowType==='BREAK' ? 'bg-primary text-white break-font' : ''">
                     <!-- move icon cell -->
-                    <td [class]="'bg-secondary text-center m-0 p-0'">
+                    <td #moveCol [class]="'bg-secondary text-center m-0 p-0'">
                         <svg xmlns=" http://www.w3.org/2000/svg" width="20px" height="20px" fill="white"
                             viewBox="0 0 16 16">
                             <path fill-rule="evenodd"
@@ -49,7 +55,7 @@
                         </svg>
                     </td>
                     <!-- dropdown cell -->
-                    <td class="bg-secondary">
+                    <td #dropdownCol class="bg-secondary">
                         <div class="dropdown">
                             <div class="dropdown-toggle p-0 text-white text-center" data-bs-toggle="dropdown">
                             </div>
@@ -61,90 +67,61 @@
                         </div>
                     </td>
                     <!-- checkbox cell -->
-                    <td [class]="'checked-secondary'">
-                        <input #rowCheck class=" form-check-input" type="checkbox"
-                            (change)="rowCheck.checked ? tableRow.classList.add('bg-info') : tableRow.classList.remove('bg-info')">
+                    <td>
+                        <app-check-cell [tableRow]="tableRow"></app-check-cell>
                     </td>
                     <!-- page number -->
                     <td>
-                        <input appOnEnterKey #pageInput type=" text" [(ngModel)]="row.rowPageNumber"
-                            style="width: 100%; background-color: transparent; border: none;"
-                            (focus)="pageInput.style.backgroundColor = '#ffefc0'"
-                            (blur)="pageInput.style.backgroundColor = 'transparent'">
+                        <app-page-number-cell [row]="row"></app-page-number-cell>
                     </td>
                     <!-- story slug -->
                     <td>
-                        <input #titleDisplay type=" text" [value]="row.rowStory.storyTitle"
-                            style="display: block; width: 100%; background-color: transparent; border: none;"
-                            [ngStyle]="{'display': titleInput.style.display == 'none' ? 'block' : 'none'}"
-                            (focus)="titleDisplay.style.display='none'; titleInput.style.display='block'; titleInput.focus()">
-
-                        <input appOnEnterKey #titleInput type=" text" [(ngModel)]="row.rowStory.storyTitle"
-                            style="display: none; width: 100%; background-color: transparent; border: none;"
-                            (focus)="titleInput.style.backgroundColor = '#ffefc0'"
-                            (blur)="titleInput.style.backgroundColor = 'transparent'"
-                            (blur)="row.rowStory.storyTitle=titleInput.value; titleInput.style.display='none'; titleDisplay.style.display='block';"
-                            (focus)="row.rowStory.storyTitle" (dblclick)="titleInput.select()">
-
-                        <!-- <input appOnEnterKey #titleInput type=" text" [(ngModel)]="row.rowStory.storyTitle"
-                            style="width: 100%; background-color: transparent; border: none;"
-                            (focus)="titleInput.style.backgroundColor = '#ffefc0'"
-                            (blur)="titleInput.style.backgroundColor = 'transparent'"> -->
+                        <app-story-title-cell [row]="row"></app-story-title-cell>
                     </td>
                     <!-- story segment -->
-                    <td>
-                        <input #segmentDisplay type="text" [value]="row.rowSegment"
-                            style="display: block; background-color: transparent; border:none; width: 100px;"
-                            [ngStyle]="{'display': segmentInput.style.display == 'none' ? 'block' : 'none'}"
-                            (focus)="segmentDisplay.style.display='none'; segmentInput.style.display='block'; segmentInput.focus()">
-                        <input appOnEnterKey #segmentInput type="text" [(ngModel)]="row.rowSegment"
-                            style="display: none; background-color: #ffefc0; border:none; width: 75px;"
-                            (blur)="row.rowSegment=segmentDisplay.value; segmentInput.style.display='none'; segmentDisplay.style.display='block';"
-                            (focus)=" row.rowSegment" (dblclick)="segmentInput.select()">
+                    <td #segmentCol style="width: min-content; height: min-content">
+                        <app-segment-cell [row]="row"></app-segment-cell>
                     </td>
                     <!-- estimated time -->
-                    <td>
-                        <input #estTimeDisplay type="text" [value]="formatFromMilli(row.rowStory.storyEst)"
-                            style="display: block; background-color: transparent; border:none; width: 75px;"
-                            [ngStyle]="{'display': estTimeInput.style.display == 'none' ? 'block' : 'none'}"
-                            (focus)="estTimeDisplay.style.display='none'; estTimeInput.style.display='block'; estTimeInput.focus()">
-                        <input appOnEnterKey #estTimeInput type="text" [value]="formatFromMilli(row.rowStory.storyEst)"
-                            style="display: none; background-color: #ffefc0; border:none; width: 75px;"
-                            (blur)="row.rowStory.storyEst=formatToMilli(estTimeInput.value); estTimeInput.style.display='none'; estTimeDisplay.style.display='block'; estTimeSum = getEstTimeSum(rundownRows)"
-                            (focus)="formatFromMilli(row.rowStory.storyEst)" (dblclick)="estTimeInput.select()">
+                    <td #estTimeCol>
+                        <app-est-time-cell [row]="row" [rundownRows]="rundownRows" [rundown]="rundown">
+                        </app-est-time-cell>
                     </td>
                     <!-- story id -->
-                    <td>{{row.rowStory.storyId}}</td>
+                    <td #storyIdCol>{{row.rowStory.storyId}}</td>
                     <!-- graphics -->
-                    <td>{{row.rowStory.storyGraphics}}</td>
+                    <td #graphicsCol>{{row.rowStory.storyGraphics}}</td>
                     <!-- front time -->
-                    <td></td>
+                    <td #frontCol>
+                        {{rundownService.formatFromMilli(rundownService.frontTimes[i])}}
+                    </td>
                     <!-- back time -->
-                    <td></td>
+                    <td #backCol>
+                        {{rundownService.formatFromMilli(rundownService.endTimes[i])}}
+                    </td>
                 </tr>
             </ng-template>
             <tr class="bg-secondary" style="height: 17px;">
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
+                <td colspan="11"></td>
             </tr>
         </tbody>
         <tfoot>
-            <tr [class]="((rundown.rundownEndTime-rundown.rundownStartTime) -
-            estTimeSum) >= 0 ? 'bg-success' : 'bg-danger'"
-                style="color: white; font-weight: bold; height: 27px; text-align: center;">
-                <td colspan="11">
-                    {{formatOverUnderFromMilli((rundown.rundownEndTime-rundown.rundownStartTime) -
-                    estTimeSum)}}</td>
+            <tr>
             </tr>
         </tfoot>
     </table>
+    <div class="row mx-1">
+        <div class="col" [class]="((rundown.rundownEndTime-rundown.rundownStartTime) -
+        rundownService.estTimeSum) >= 0 ? 'bg-success' : 'bg-danger'"
+            style="color: white; font-weight: bold; height: 27px; text-align: center; border-radius: 0.375rem;">
+            {{((rundown.rundownEndTime-rundown.rundownStartTime) -
+            rundownService.estTimeSum) > 0 ? "UNDER" : ((rundown.rundownEndTime-rundown.rundownStartTime) -
+            rundownService.estTimeSum)==0
+            ? "ON TIME" : "OVER" }}
+            &nbsp;&nbsp;{{rundownService.formatOverUnderFromMilli((rundown.rundownEndTime-rundown.rundownStartTime) -
+            rundownService.estTimeSum)}}
+        </div>
+    </div>
+</div>
+<div>
 </div>

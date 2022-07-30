@@ -14,6 +14,12 @@ import { NavbarComponent } from './navbar/navbar.component';
 import { ClockComponent } from './clock/clock.component';
 import { DateComponent } from './date/date.component';
 import { OnEnterKeyDirective } from './directives/onEnterKey/on-enter-key.directive';
+import { PageNumberCellComponent } from './table/page-number-cell/page-number-cell.component';
+import { StoryTitleCellComponent } from './table/story-title-cell/story-title-cell.component';
+import { CheckCellComponent } from './table/check-cell/check-cell.component';
+import { SegmentCellComponent } from './table/segment-cell/segment-cell.component';
+import { EstTimeCellComponent } from './table/est-time-cell/est-time-cell.component';
+import { OnEscKeyDirective } from './directives/on-esc-key.directive';
 
 @NgModule({
   declarations: [
@@ -28,6 +34,12 @@ import { OnEnterKeyDirective } from './directives/onEnterKey/on-enter-key.direct
     ClockComponent,
     DateComponent,
     OnEnterKeyDirective,
+    PageNumberCellComponent,
+    StoryTitleCellComponent,
+    CheckCellComponent,
+    SegmentCellComponent,
+    EstTimeCellComponent,
+    OnEscKeyDirective,
   ],
   imports: [
     BrowserModule,

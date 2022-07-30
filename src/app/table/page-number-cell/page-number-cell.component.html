@@ -1,0 +1,9 @@
+<input #pageDisplay type=" text" [value]="row.rowPageNumber"
+    style="display: block; width: 100%; background-color: transparent; border: none;"
+    [ngStyle]="{'display': pageInput.style.display == 'none' ? 'block' : 'none'}"
+    (focus)="pageDisplay.style.display='none'; pageInput.style.display='block'; pageInput.focus()">
+
+<input appOnEnterKey appOnEscKey #pageInput type=" text" [(ngModel)]="row.rowPageNumber"
+    style="display: none; width: 100%; background-color: transparent; border: none;"
+    (focus)="pageInput.style.backgroundColor = '#ffefc0'"
+    (blur)="row.rowPageNumber=pageInput.value; pageInput.style.display='none'; pageDisplay.style.display='block';pageInput.setSelectionRange(pageInput.value.length, pageInput.value.length);">

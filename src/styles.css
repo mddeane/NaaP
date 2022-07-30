@@ -1,3 +1,24 @@
 body {
     background-color: floralwhite !important;
 }
+
+
+.break-font {
+    color: white !important;
+}
+
+.break-font td {
+    color: white !important;
+}
+
+.break-font td input {
+    color: white;
+}
+
+.break-font td input:focus-visible {
+    color: black;
+}
+
+.table-rundown td input:focus-visible {
+    outline: none;
+}

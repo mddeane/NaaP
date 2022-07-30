@@ -13,13 +13,28 @@ export class RundownComponent implements OnInit {
   rundownRows: RundownRow[] = [];
   rundown: Rundown = new Rundown("", "", "", new Date(), 0, 0, []);
 
-  constructor(private rundownService: RundownService) { }
+  // estTimeSum: number = 0;
+
+  // frontTimes: number[] = [];
+  // endTimes: number[] = [];
+
+  // startTime: number = 0;
+  // endTime: number = 0;
+
+  constructor(public rundownService: RundownService) { }
 
   ngOnInit(): void {
     this.getRundown();
     this.getRows();
     this.setPageNumbers(this.rundownRows);
-    this.estTimeSum = this.getEstTimeSum(this.rundownRows);
+    this.rundownService.setFrontEndTimes(this.rundown)
+    console.log("length: " + this.rundownService.inputs.length);
+    for (let inp of this.rundownService.inputs) {
+      console.log("inputs: " + inp);
+    }
+    for (let row of this.rundownRows) {
+      console.log("est: " + row.rowStory.storyEst);
+    }
 
   }
 
@@ -31,25 +46,52 @@ export class RundownComponent implements OnInit {
     this.rundownService.getRundownRows().subscribe(rowData => this.rundownRows = rowData);
   }
 
-  ss: number = 1000;
-  mm: number = 60 * this.ss;
-  hh: number = 60 * this.mm;
-  dd: number = 24 * this.hh;
+  // getFrontTimes(rd: Rundown): number[] {
+  //   let frontTimes: number[] = [];
+  //   let rows: RundownRow[] = rd.rundownRows;
+
+  //   frontTimes[0] = rd.rundownStartTime;
+
+
+  //   for (let i = 1; i < rows.length; i++) {
+  //     frontTimes.push(frontTimes[i - 1] + rows[i - 1].rowStory.storyEst);
+  //     console.log("fronttime: " + frontTimes[i])
+  //   }
+  //   return frontTimes;
+  // }
+
+  // getEndTimes(rd: Rundown): number[] {
+  //   let endTimes: number[] = [];
+  //   let rows: RundownRow[] = rd.rundownRows;
+
+  //   endTimes[0] = rd.rundownEndTime - rows[0].rowStory.storyEst;
+  //   // endTimes[rows.length - 1] = rd.rundownEndTime;
+
+  //   for (let i = 1; i < rows.length; i++) {
+  //     endTimes.push(endTimes[i - 1] - rows[i].rowStory.storyEst);
+  //   }
+  //   return endTimes;
+  // }
+
+  SEC_MILLI: number = 1000;
+  MIN_MILLI: number = 60 * this.SEC_MILLI;
+  HOUR_MILLI: number = 60 * this.MIN_MILLI;
+  DAY_MILLI: number = 24 * this.HOUR_MILLI;
 
   formatFromMilli(milli: number): string {
     let str: string = "";
 
-    let ddd: number = Math.floor(milli / this.dd);
-    let hhh: number = Math.floor(milli / this.hh) % 24;
-    let mmm: number = Math.floor(milli / this.mm) % 60;
-    let sss: number = Math.floor(milli / this.ss) % 60;
+    let dayStr: number = Math.floor(milli / this.DAY_MILLI);
+    let hourStr: number = Math.floor(milli / this.HOUR_MILLI) % 24;
+    let minStr: number = Math.floor(milli / this.MIN_MILLI) % 60;
+    let secStr: number = Math.floor(milli / this.SEC_MILLI) % 60;
 
-    let dddd: string = ddd < 10 ? "0" + ddd.toString() : ddd.toString();
-    let hhhh: string = hhh < 10 ? "0" + hhh.toString() : hhh.toString();
-    let mmmm: string = mmm < 10 ? "0" + mmm.toString() : mmm.toString();
-    let ssss: string = sss < 10 ? "0" + sss.toString() : sss.toString();
+    let dayNum: string = dayStr < 10 ? "0" + dayStr.toString() : dayStr.toString();
+    let hourNum: string = hourStr < 10 ? "0" + hourStr.toString() : hourStr.toString();
+    let minNum: string = minStr < 10 ? "0" + minStr.toString() : minStr.toString();
+    let secNum: string = secStr < 10 ? "0" + secStr.toString() : secStr.toString();
 
-    str = `${dddd != "00" ? dddd + ":" : ""}${hhhh != "00" ? hhhh + ":" : dddd != "00" ? "00:" : ""}${mmmm}:${ssss}`;
+    str = `${dayNum != "00" ? dayNum + ":" : ""}${hourNum != "00" ? hourNum + ":" : dayNum != "00" ? "00:" : ""}${minNum}:${secNum}`;
     return str;
   }
 
@@ -72,7 +114,7 @@ export class RundownComponent implements OnInit {
     let hhh: number = this.getHoursFromString(str);
     let ddd: number = this.getDaysFromString(str);
 
-    milli = (ddd * this.dd) + (hhh * this.hh) + (mmm * this.mm) + (sss * this.ss);
+    milli = (ddd * this.DAY_MILLI) + (hhh * this.HOUR_MILLI) + (mmm * this.MIN_MILLI) + (sss * this.SEC_MILLI);
 
     return milli;
   }
@@ -217,31 +259,9 @@ export class RundownComponent implements OnInit {
     }
   }
 
-  estTimeSum: number = 0;
+  is24: boolean = false;
 
-  getEstTimeSum(rows: RundownRow[]): number {
-    let sum: number = 0;
-    for (let row of rows) {
-      sum += row.rowStory.storyEst;
-    }
-    console.log("sum: " + sum);
-    return sum;
+  change24Hour(is24hr: boolean): boolean {
+    return is24hr;
   }
-
-  formatOverUnderFromMilli(milli: number): string {
-    let formattedOverUnder: string = "";
-    let overUnderNotNegative: number = 0;
-    let overUnderPrefix: string = "";
-    if (milli >= 0) {
-      overUnderNotNegative = milli;
-    } else {
-      overUnderNotNegative = milli * (-1);
-      overUnderPrefix = "-";
-    }
-
-    formattedOverUnder = overUnderPrefix + this.formatFromMilli(overUnderNotNegative);
-
-    return formattedOverUnder;
-  }
-
 }

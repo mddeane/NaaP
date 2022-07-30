@@ -1,0 +1,23 @@
+<input #estTimeDisplay type="text" [value]="rundownService.formatFromMilli(row.rowStory.storyEst)"
+    style="display: block; background-color: transparent; border:none; width: 75px;"
+    [ngStyle]="{'display': estTimeInput.style.display == 'none' ? 'block' : 'none'}"
+    (focus)="estTimeDisplay.style.display='none'; estTimeInput.style.display='block'; estTimeInput.focus()">
+
+<!-- <div [ngStyle]="{'display': estTimeInput.style.display == 'none' ? 'block' : 'none'}"
+    style="width: 100%; height: auto; cursor: text;"
+    (click)="estTimeDisplay.style.display='none'; estTimeInput.style.display='block'; estTimeInput.focus()">
+    <span #estTimeDisplay style="display: block; background-color: transparent; border:none; ">
+        {{rundownService.formatFromMilli(row.rowStory.storyEst)
+        ? rundownService.formatFromMilli(row.rowStory.storyEst) : "&nbsp;"}}
+    </span>
+</div> -->
+
+<input appOnEnterKey appOnEscKey #estTimeInput type="text"
+    [value]="rundownService.formatFromMilli(row.rowStory.storyEst)"
+    style="display: none; background-color: #ffefc0; border:none; width: 100%; padding: 0;"
+    (blur)="row.rowStory.storyEst=rundownService.formatToMilli(estTimeInput.value); 
+    estTimeInput.style.display='none'; 
+    estTimeDisplay.style.display='block'; 
+    estTimeSum = rundownService.getEstTimeSum(rundown.rundownRows); 
+    estTimeInput.setSelectionRange(estTimeInput.value.length, estTimeInput.value.length); rundownService.setFrontEndTimes(rundown)" (focus)="rundownService.formatFromMilli(row.rowStory.storyEst)"
+    (dblclick)="estTimeInput.select()">

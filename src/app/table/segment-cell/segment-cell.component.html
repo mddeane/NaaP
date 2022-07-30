@@ -1,0 +1,20 @@
+<!-- <textarea #segmentDisplay type="text" [value]="row.rowSegment" maxlength="100" rows="1"
+    style="display: block; width: 100%; background-color: transparent; border:none; padding: 0;"
+    [ngStyle]="{'display': segmentInput.style.display == 'none' ? 'block' : 'none'}"
+    (focus)="segmentDisplay.style.display='none'; segmentInput.style.display='block'; segmentInput.focus()"></textarea> -->
+
+
+<div [ngStyle]="{'display': segmentInput.style.display == 'none' ? 'block' : 'none'}"
+    style="width: 100%; height: auto; cursor: text;"
+    (click)="segmentDisplay.style.display='none'; segmentInput.style.display='block'; segmentInput.focus()">
+    <span #segmentDisplay style="display: block; background-color: transparent; border:none; ">
+        {{row.rowSegment
+        ? row.rowSegment : "&nbsp;"}}
+    </span>
+</div>
+
+<input appOnEnterKey appOnEscKey #segmentInput previousValue="{{segmentInput.value}}" type="text"
+    [(ngModel)]="row.rowSegment"
+    style="display: none; background-color: #ffefc0; border:none; border-radius: 4px; padding: 0;"
+    (blur)="row.rowSegment=segmentInput.value; segmentInput.style.display='none'; segmentDisplay.style.display='block';segmentInput.setSelectionRange(segmentInput.value.length, segmentInput.value.length);"
+    (focus)=" row.rowSegment" (dblclick)="segmentInput.select()">

@@ -1,6 +1,11 @@
-<div class="w-100" style="text-align: right;">
-    <span class="bg-primary text-white w-auto px-2 py-1" style="font-weight: bold; outline: 1px white solid;">
+<!-- <div class="w-100" style="text-align: right;"> -->
+<!-- <span class="bg-primary text-white w-auto px-2 py-1" style="font-weight: bold; outline: 1px white solid;">
         {{currentHour}}:{{currentMinute}}:{{currentSecond}}
         {{isPM ? "PM" : "AM"}}
-    </span>
-</div>
+    </span> -->
+<button class="btn btn-primary py-0" (click)="toggle24Hour()">
+    {{currentHour}}:{{currentMinute}}:{{currentSecond}}
+    {{is24Hour ? "" : isPM ? "PM" : "AM"}}
+    <!-- {{testGetMilli()}} -->
+</button>
+<!-- </div> -->

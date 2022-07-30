@@ -1,0 +1,4 @@
+
+.checked-secondary input:checked {
+    background-color: #7b66ab;
+}
