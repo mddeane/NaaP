@@ -40,23 +40,23 @@ export class RundownService {
   HOUR_MILLI: number = 60 * this.MIN_MILLI;
   DAY_MILLI: number = 24 * this.HOUR_MILLI;
 
-  formatFromMilli(milli: number, is12?: boolean): string {
+  formatFromMilli(milli: number, is24?: boolean): string {
     let str: string = "";
-    let is24: boolean = true;
-    is12 ? is24 = false : is24 = true;
-    let isPM = false;
+    //let is24Flag: boolean = is24 ? is24 : false;
+    let isPM: boolean = false;
 
-    let dayStr: number = Math.floor(milli / this.DAY_MILLI);
-    let hourStr: number = Math.floor(milli / this.HOUR_MILLI) % 24;
-    let minStr: number = Math.floor(milli / this.MIN_MILLI) % 60;
-    let secStr: number = Math.floor(milli / this.SEC_MILLI) % 60;
+    let dayNum: number = Math.floor(milli / this.DAY_MILLI);
+    let hourNum: number = Math.floor(milli / this.HOUR_MILLI) % 24;
+    let minNum: number = Math.floor(milli / this.MIN_MILLI) % 60;
+    let secNum: number = Math.floor(milli / this.SEC_MILLI) % 60;
 
-    let dayNum: string = dayStr < 10 ? "0" + dayStr.toString() : dayStr.toString();
-    let hourNum: string = hourStr < 10 ? "0" + hourStr.toString() : is24 ? hourStr.toString() : (hourStr - 12).toString();
-    let minNum: string = minStr < 10 ? "0" + minStr.toString() : minStr.toString();
-    let secNum: string = secStr < 10 ? "0" + secStr.toString() : secStr.toString();
+    let dayStr: string = dayNum < 10 ? "0" + dayNum.toString() : dayNum.toString();
+    let hourStr: string = hourNum < 10 ? "0" + hourNum.toString() : is24 ? hourNum.toString() : (hourNum - 12).toString();
+    let minStr: string = minNum < 10 ? "0" + minNum.toString() : minNum.toString();
+    let secStr: string = secNum < 10 ? "0" + secNum.toString() : secNum.toString();
+    let amPm: string = isPM ? "PM" : "AM";
 
-    str = `${dayNum != "00" ? dayNum + ":" : ""}${hourNum != "00" ? hourNum + ":" : dayNum != "00" ? "00:" : ""}${minNum}:${secNum} ${is24 ? "" : isPM ? "PM" : "AM"}`;
+    str = `${dayStr != "00" ? dayStr + ":" : ""}${hourStr != "00" ? hourStr + ":" : dayStr != "00" ? "00:" : ""}${minStr}:${secStr}`;
     return str;
   }
 
@@ -74,12 +74,12 @@ export class RundownService {
       return 0;
     }
 
-    let sss: number = this.getSecondsFromString(str);
-    let mmm: number = this.getMinutesFromString(str);
-    let hhh: number = this.getHoursFromString(str);
-    let ddd: number = this.getDaysFromString(str);
+    let secNum: number = this.getSecondsFromString(str);
+    let minNum: number = this.getMinutesFromString(str);
+    let hourNum: number = this.getHoursFromString(str);
+    let dayNum: number = this.getDaysFromString(str);
 
-    milli = (ddd * this.DAY_MILLI) + (hhh * this.HOUR_MILLI) + (mmm * this.MIN_MILLI) + (sss * this.SEC_MILLI);
+    milli = (dayNum * this.DAY_MILLI) + (hourNum * this.HOUR_MILLI) + (minNum * this.MIN_MILLI) + (secNum * this.SEC_MILLI);
 
     return milli;
   }
@@ -95,6 +95,13 @@ export class RundownService {
 
     const ok = re.test(str);
     return ok;
+  }
+
+  getAMPMfromMilli(milli: number): string {
+    let amOrPm: string = "";
+    let date = new Date(milli);
+    amOrPm = date.getHours() >= 12 ? "PM" : "AM"
+    return amOrPm;
   }
 
   getSecondsFromString(str: string): number {

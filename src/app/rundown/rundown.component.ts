@@ -2,6 +2,7 @@ import { Rundown } from './rundown.model';
 import { RundownRow } from './../rundown-row/rundownRow.model';
 import { RundownService } from './rundown.service';
 import { Component, OnInit } from '@angular/core';
+import { AlertService } from '../alert/alert.service';
 
 @Component({
   selector: 'app-rundown',
@@ -21,13 +22,13 @@ export class RundownComponent implements OnInit {
   // startTime: number = 0;
   // endTime: number = 0;
 
-  constructor(public rundownService: RundownService) { }
+  constructor(public rundownService: RundownService, public alertService: AlertService) { }
 
   ngOnInit(): void {
     this.getRundown();
     this.getRows();
     this.setPageNumbers(this.rundownRows);
-    this.rundownService.setFrontEndTimes(this.rundown)
+    this.rundownService.setFrontEndTimes(this.rundown);
     console.log("length: " + this.rundownService.inputs.length);
     for (let inp of this.rundownService.inputs) {
       console.log("inputs: " + inp);
@@ -260,8 +261,13 @@ export class RundownComponent implements OnInit {
   }
 
   is24: boolean = false;
+  isPM: boolean = false;
 
-  change24Hour(is24hr: boolean): boolean {
-    return is24hr;
+  change24Hour(is24HrFlag: boolean): boolean {
+    return is24HrFlag;
+  }
+
+  changePM(isPMFlag: boolean): boolean {
+    return isPMFlag;
   }
 }

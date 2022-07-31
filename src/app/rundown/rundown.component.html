@@ -2,14 +2,16 @@
     <div class="row mt-2 mb-1">
         <div class="col-md-8">
             <!-- <h5>5pm News Wed Jul 22 2022</h5> -->
-            <h5>{{rundown.rundownTitle}} {{is24}}</h5>
+            <h5>{{rundown.rundownTitle}}</h5>
         </div>
         <div class="col-md-4" style="text-align: right;">
             <span class="ms-1">
                 <app-date></app-date>
             </span>
             <span class="ms-1">
-                <app-clock (getIs24Hour)="is24=change24Hour($event)"></app-clock>
+                <app-clock (getIs24Hour)="is24=change24Hour($event)" (getIsPM)="isPM=changePM($event)"
+                    [rundown]="rundown">
+                </app-clock>
             </span>
         </div>
     </div>
@@ -32,14 +34,22 @@
                     <input #allRowCheck class=" form-check-input" type="checkbox">
                 </th>
                 <th scope=" col" style="max-width: 55px">Page</th>
-                <th scope="col" style="width: 300px">Slug</th>
+                <th scope="col" style="min-width: 300px">Slug</th>
                 <th scope="col" style="width: 120px">Segment</th>
+                <!-- <th scope="col" style="min-width: 100px">Anchor</th> -->
                 <th scope="col" style="width: 75px">Est</th>
+                <!-- <th scope="col" style="width: 75px">Actual</th> -->
                 <th scope="col" style="width: 100px">ID</th>
+                <!-- <th scope="col" style="width: 75px">Camera</th> -->
+                <!-- <th scope="col" style="width: 75px">Writer</th> -->
                 <th scope="col" style="width: 300px">Graphics</th>
-                <th scope="col" style="min-width: 75px">Front</th>
-                <th scope="col" style="min-width: 75px">Back</th>
-                <!-- Anchor, Camera, Source, Notes, Actual Time, Writer, Modified Time, Modified By -->
+                <th scope="col" style="min-width: 100px">Front</th>
+                <th scope="col" style="min-width: 100px">Back</th>
+                <!-- <th scope="col" style="min-width: 100px">Source</th> -->
+                <!-- <th scope="col" style="min-width: 200px">Notes</th> -->
+                <!-- <th scope="col" style="min-width: 100px">Last Modified</th> -->
+                <!-- <th scope="col" style="min-width: 100px">Modified By</th> -->
+                <!-- Page, Slug, Segment, Anchor, Est, Actual, ID, Camera, Writer, Graphics, Front, Back, Source, Notes, Last Modified, Modified By -->
             </tr>
         </thead>
         <tbody>
@@ -48,11 +58,13 @@
                 <tr #tableRow [class]="row.rowType==='BREAK' ? 'bg-primary text-white break-font' : ''">
                     <!-- move icon cell -->
                     <td #moveCol [class]="'bg-secondary text-center m-0 p-0'">
-                        <svg xmlns=" http://www.w3.org/2000/svg" width="20px" height="20px" fill="white"
-                            viewBox="0 0 16 16">
-                            <path fill-rule="evenodd"
-                                d="M2.5 12a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5zm0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5zm0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5z" />
-                        </svg>
+                        <div>
+                            <svg xmlns=" http://www.w3.org/2000/svg" width="20px" height="20px" fill="white"
+                                viewBox="0 0 16 16">
+                                <path fill-rule="evenodd"
+                                    d="M2.5 12a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5zm0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5zm0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5z" />
+                            </svg>
+                        </div>
                     </td>
                     <!-- dropdown cell -->
                     <td #dropdownCol class="bg-secondary">
@@ -93,11 +105,13 @@
                     <td #graphicsCol>{{row.rowStory.storyGraphics}}</td>
                     <!-- front time -->
                     <td #frontCol>
-                        {{rundownService.formatFromMilli(rundownService.frontTimes[i])}}
+                        {{rundownService.formatFromMilli(rundownService.frontTimes[i], is24)}}
+                        {{is24 ? "" : rundownService.getAMPMfromMilli(rundownService.frontTimes[i])}}
                     </td>
                     <!-- back time -->
                     <td #backCol>
-                        {{rundownService.formatFromMilli(rundownService.endTimes[i])}}
+                        {{rundownService.formatFromMilli(rundownService.endTimes[i], is24)}}
+                        {{is24 ? "" : rundownService.getAMPMfromMilli(rundownService.endTimes[i])}}
                     </td>
                 </tr>
             </ng-template>
@@ -110,7 +124,7 @@
             </tr>
         </tfoot>
     </table>
-    <div class="row mx-1">
+    <div class="row">
         <div class="col" [class]="((rundown.rundownEndTime-rundown.rundownStartTime) -
         rundownService.estTimeSum) >= 0 ? 'bg-success' : 'bg-danger'"
             style="color: white; font-weight: bold; height: 27px; text-align: center; border-radius: 0.375rem;">

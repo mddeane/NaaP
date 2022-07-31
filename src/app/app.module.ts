@@ -20,6 +20,7 @@ import { CheckCellComponent } from './table/check-cell/check-cell.component';
 import { SegmentCellComponent } from './table/segment-cell/segment-cell.component';
 import { EstTimeCellComponent } from './table/est-time-cell/est-time-cell.component';
 import { OnEscKeyDirective } from './directives/on-esc-key.directive';
+import { AlertComponent } from './alert/alert.component';
 
 @NgModule({
   declarations: [
@@ -40,6 +41,7 @@ import { OnEscKeyDirective } from './directives/on-esc-key.directive';
     SegmentCellComponent,
     EstTimeCellComponent,
     OnEscKeyDirective,
+    AlertComponent,
   ],
   imports: [
     BrowserModule,

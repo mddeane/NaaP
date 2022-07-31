@@ -1,5 +1,7 @@
 import { RundownService } from './../rundown/rundown.service';
-import { Component, EventEmitter, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Rundown } from '../rundown/rundown.model';
+import { AlertService } from '../alert/alert.service';
 
 @Component({
   selector: 'app-clock',
@@ -7,10 +9,11 @@ import { Component, EventEmitter, OnInit, Output } from '@angular/core';
   styleUrls: ['./clock.component.css']
 })
 export class ClockComponent implements OnInit {
-
+  @Input() rundown: Rundown = new Rundown("", "", "", new Date(), 0, 0, []);
   @Output() getIs24Hour = new EventEmitter<boolean>();
+  @Output() getIsPM = new EventEmitter<boolean>();
 
-  constructor(private rundownService: RundownService) { }
+  constructor(public rundownService: RundownService, public alertService: AlertService) { }
 
   ngOnInit(): void {
     this.getTimeValues();
@@ -83,5 +86,9 @@ export class ClockComponent implements OnInit {
 
   emitIs24Hour() {
     this.getIs24Hour.emit(this.is24Hour);
+  }
+
+  emitIsPM() {
+    this.getIsPM.emit(this.isPM);
   }
 }

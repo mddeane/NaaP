@@ -1,0 +1,15 @@
+<div class="row justify-content-center" *ngFor="let alert of alertService.alerts; let i=index"
+    onclick="this.style.display='none'" style="position: fixed; top: 30px; width: 100%;">
+    <!-- <div [ngClass]="calculateAlertBackgroundColor(alert.alertType)"> -->
+    <div class="col-10 col-lg-6 col-md-8 col-sm-8 col-xs-10">
+        <button [class]="'btn btn-' + alert.alertType + ' my-1 shadow w-100'">
+            <div style="float: left; width: 90%;">
+                <div>
+                    {{alert.alertText}}
+                </div>
+            </div>
+            <div style=" float: right; width: 10%;font-size: 150%; line-height: 80%;">&times;</div>
+        </button>
+
+    </div>
+</div>
